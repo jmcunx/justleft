@@ -1,0 +1,93 @@
+.\"  Copyright (c) 1999 2001 2002 ... 2021 2022 
+.\"      John McCue <jmccue@jmcunx.com>
+.\" 
+.\"  Permission to use, copy, modify, and distribute this software for any
+.\"  purpose with or without fee is hereby granted, provided that the above
+.\"  copyright notice and this permission notice appear in all copies.
+.\" 
+.\"  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+.\"  WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+.\"  MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+.\"  ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+.\"  WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+.\"  ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+.\"  OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+.\"
+.TH justleft 1 "2020/09/23" "JMC" "Left Justify String"
+.SH NAME
+justleft - Left Justify Text
+.SH SYNOPSIS
+justleft [OPTIONS] [FILE...]
+.SH DESCRIPTION
+Removes leading white space from lines of a text file.
+ie: left justifies all lines of the input text file/stream.
+Output written to stdout or the file specified.
+.PP
+If no files (FILE) are specified on the command line or
+if FILE has name '-', stdin (Standard Input) is used.
+.SH OPTIONS
+.TP
+-e file
+OPTIONAL - Errors written to the file specified, defaults to stderr.
+.TP
+-f
+Force file create.
+Create file even if the target file exists.
+.TP
+-h
+Show brief help and exit.
+.TP
+-o file
+OPTIONAL - Write output to the file specified, defaults to stdout.
+.TP
+-R
+Removes trailing white space from each line of a text file,
+default is to leave trailing white space as is.
+.TP
+-V
+output version information and exit.
+.TP
+-v
+Optional, Verbose Level.
+Print information about the run,
+default do not show run messages.
+Can be specified multiple times,
+each specification increases verbose level:
+.nf
+    Level  Meaning
+    -----  -------------------------------------
+    = 0    Do not show any messages, default
+    >= 1   Show files as they are processed
+    >= 2   Above plus file counts
+.fi
+.SH DIAGNOSTICS
+Processes one line at a time, assumes the file is a text file.
+.PP
+Does not word wrap lines, only removes leading white space
+from each text line.
+.PP
+Note, if an error occurs while parsing command line
+arguments, errors may NOT be written to the error file
+supplied on the command line.
+.PP
+If available, you can use:
+.nf
+    sed 's/^[\\t ]*//' < infile > outfile
+.fi
+to perform the same action.
+Note, depending upon your version
+of sed, you may need to replace \\t with a real
+tab character.
+.SH BUGS
+Do not know of any.
+.SH ENVIRONMENT
+none.
+.SH ERROR-CODES
+.nf
+0 success
+1 processing error or help/rev displayed
+2 One or more input files could not be processed
+.fi
+.SH SEE-ALSO
+.fi
+ed(1), ex(1), sed(1), fmt(1), rtw(1), lcase(1)
