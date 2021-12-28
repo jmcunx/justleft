@@ -167,7 +167,7 @@ void process_a_file(struct s_work *w, char *fname, char **buf, size_t *bsize,
     return;
 
   /*** process data ***/
-  while ((cbytes = getline(buf, bsize, fp)) > (ssize_t) -1)
+  while ((cbytes = j2_getline(buf, bsize, fp)) > (ssize_t) -1)
     {
       lines.read++;
       lines.bytes_read += cbytes;
