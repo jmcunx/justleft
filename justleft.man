@@ -57,8 +57,8 @@ each specification increases verbose level:
     Level  Meaning
     -----  -------------------------------------
     = 0    Do not show any messages, default
-    >= 1   Show files as they are processed
-    >= 2   Above plus file counts
+    >= 1   show file names on stdout
+    >= 2   Above plus file counts on stderr
 .fi
 .SH DIAGNOSTICS
 Processes one line at a time, assumes the file is a text file.

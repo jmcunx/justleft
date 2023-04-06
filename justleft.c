@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1999 ... 2021 2022
+ * Copyright (c) 1999 ... 2023 2024
  *     John McCue <jmccue@jmcunx.com>
  *
  * Permission to use, copy, modify, and distribute this software for any
@@ -35,8 +35,10 @@
 #include <err.h>
 #endif
 
+#ifdef HAVE_JLIB
 #include <j_lib2.h>
 #include <j_lib2m.h>
+#endif
 
 #include "justleft.h"
 
@@ -45,21 +47,22 @@
 /*
  * show_file_heading() -- Show run stats
  */
-void show_file_heading(char *fname)
+void show_file_heading(FILE *fp, char *fname)
 
 {
 
-  fprintf(stderr, "%s\n", LIT_C80);
+  fprintf(fp, "%s\n", LIT_C80);
 
   if (fname == (char *) NULL)
-    fprintf(stderr, "%s\n", LIT_STDIN);
+    fprintf(fp, "%s\n", LIT_STDIN);
   else
     {
       if (strcmp(fname, FILE_NAME_STDIN) == 0)
-	fprintf(stderr, "%s\n", LIT_STDIN);
+	fprintf(fp, "%s\n", LIT_STDIN);
       else
-	fprintf(stderr, "%s\n", fname);
+	fprintf(fp, "%s\n", fname);
     }
+  fprintf(fp, "%s\n", LIT_C80);
 
 } /* show_file_heading() */
 
@@ -167,7 +170,7 @@ void process_a_file(struct s_work *w, char *fname, char **buf, size_t *bsize,
   init_counts(&lines);
   
   if (w->verbose > 0)
-    show_file_heading(fname);
+    show_file_heading(w->out.fp, fname);
   
   if ( ! open_in(&fp, fname, w->err.fp) )
     return;
@@ -197,10 +200,11 @@ void process_a_file(struct s_work *w, char *fname, char **buf, size_t *bsize,
       t->writes += lines.writes;
       t->bytes_read += lines.bytes_read;
       t->bytes_writes += lines.bytes_writes;
-      fprintf(stderr, MSG_INFO_I023, lines.read);
-      fprintf(stderr, MSG_INFO_I035, lines.writes);
-      fprintf(stderr, MSG_INFO_I024, lines.bytes_read);
-      fprintf(stderr, MSG_INFO_I041, lines.bytes_writes);
+      show_file_heading(w->err.fp, fname);
+      fprintf(w->err.fp, MSG_INFO_I023, lines.read);
+      fprintf(w->err.fp, MSG_INFO_I035, lines.writes);
+      fprintf(w->err.fp, MSG_INFO_I024, lines.bytes_read);
+      fprintf(w->err.fp, MSG_INFO_I041, lines.bytes_writes);
     }
   
   close_in(&fp, fname);
@@ -240,11 +244,11 @@ void process_all(int argc, char **argv, struct s_work *w)
 
   if (w->verbose > 1)
     {
-      show_file_heading(LIT_TALLF);
-      fprintf(stderr, MSG_INFO_I023, totl.read);
-      fprintf(stderr, MSG_INFO_I035, totl.writes);
-      fprintf(stderr, MSG_INFO_I024, totl.bytes_read);
-      fprintf(stderr, MSG_INFO_I041, totl.bytes_writes);
+      show_file_heading(w->err.fp, LIT_TALLF);
+      fprintf(w->err.fp, MSG_INFO_I023, totl.read);
+      fprintf(w->err.fp, MSG_INFO_I035, totl.writes);
+      fprintf(w->err.fp, MSG_INFO_I024, totl.bytes_read);
+      fprintf(w->err.fp, MSG_INFO_I041, totl.bytes_writes);
     }
 
 }  /* process_all() */
